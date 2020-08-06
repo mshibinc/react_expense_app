@@ -1,8 +1,48 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './style.css';
+import { homePageData } from '../services/Myservice';
 class Home extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			homepage: {},
+			expense: '',
+			income:''
+		};
+	}
+	componentDidMount() {
+		homePageData()
+			.then((res) => {
+				this.setState({
+					homepage: res.data,
+					expense: res.data.incandexp[0].expense,
+					income: res.data.incandexp[0].income,
+				});
+			})
+			.catch((err) => err);
+	}
+
 	render() {
+		if (this.state.homepage.incandexp) {
+			console.log(this.state.expense);
+		}
+
+		// var obj = JSON.parse(inexp);
+		// console.log(obj.expense);
+		// inexp.map((itm,key)=>{
+		// 	let expense =this.state.homepage.incandexp[itm].expense
+		// 	let expenseData =Object.keys(expense)
+		// 	// let income =this.state.homepage.incandexp[itm].income
+		// 	console.log(expenseData);
+		// })
+		// console.log(inexp);
+		// console.log(inexp);
+		// for (i in inexp.incandexp) {
+		// 	for (j in inexp.incandexp[i].models) {
+		// 	  x += inexp.cars[i].models[j] + "<br>";
+		// 	}
+		//   }
 		return (
 			<div className="container-fluid">
 				{/* income & expense button */}
@@ -28,17 +68,18 @@ class Home extends Component {
 				</div>
 				<hr className="hr-1" />
 				{/* current status */}
+
 				<div className="container ex-in-box">
 					<div className="row">
 						<div className="col-6 br-1">
 							<div className="in-1">
-								<p>₹8000</p>
+								<p>₹ 800</p>
 								<div>Income</div>
 							</div>
 						</div>
 						<div className="col-6">
 							<div className="in-1">
-								<p>₹8000</p>
+								<p>₹ {this.state.expense}</p>
 								<div>Expense</div>
 							</div>
 						</div>

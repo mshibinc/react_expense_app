@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PageNav from './PageNav';
-import { addExpense } from '../services/Actions';
+import { addExpense } from '../services/Myservice';
 class Expense extends Component {
 	constructor(props) {
 		super(props);
@@ -17,37 +17,41 @@ class Expense extends Component {
 			[e.target.name]: e.target.value,
 		});
 	};
-	saveExpense = (e) => {
-        e.preventDefault();
-        // console.log(this.state);
-		addExpense(this.state).then((res) => {
-			if (res.data === 'success') {
-				alert(res.data);
-			} else {
-				alert(res.data);
-			}
-		}).catch((err)=>err)
-    };
-    // saveExpense = (e) => {
+	// saveExpense = (e) => {
     //     e.preventDefault();
     //     // console.log(this.state);
-    //     const data =  new FormData()
-    //     data.append('amount',this.state.amount)
-    //     data.append('type',this.state.type)
-	// 	addExpense(data).then((res) => {
+	// 	addExpense(this.state).then((res) => {
 	// 		if (res.data === 'success') {
 	// 			alert(res.data);
 	// 		} else {
 	// 			alert(res.data);
 	// 		}
 	// 	}).catch((err)=>err)
-	// };
+    // };
+    saveExpense = (e) => {
+        e.preventDefault();
+        // console.log(this.state);
+        const data =  new FormData()
+        data.append('amount',this.state.amount)
+        data.append('type',this.state.type)
+        data.append('desc',this.state.desc)
+        data.append('date',this.state.date)
+        data.append('time',this.state.time)
+		addExpense(data).then((res) => {
+			if (res.data.response === 'success') {
+                alert(res.data.response);
+                this.formClear.reset();
+			} else {
+				alert(res.data.response);
+			}
+		}).catch((err)=>err)
+	};
 	render() {
 		return (
 			<div className="container-fluid padrem">
 				<PageNav pagename="Add Expense" />
 				<div className="container">
-					<form>
+					<form ref={(form) => (this.formClear = form)}>
 						<div className="form-group">
 							<input
 								type="text"
